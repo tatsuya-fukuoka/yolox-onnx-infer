@@ -91,7 +91,6 @@ def infe_image(args,input_shape):
     img, ratio = preprocess(origin_img, input_shape)
     
     start = time.time()
-    logging.info(f'onnx model: {os.path.basename(args.model)}')
     session = onnxruntime.InferenceSession(args.model)
     
     ort_inputs = {session.get_inputs()[0].name: img[None, :, :, :]}
@@ -127,7 +126,6 @@ def infe_video(args,input_shape):
             img, ratio = preprocess(origin_img, input_shape)
             
             start = time.time()
-            logging.info(f'onnx model: {os.path.basename(args.model)}')
             session = onnxruntime.InferenceSession(args.model)
             
             ort_inputs = {session.get_inputs()[0].name: img[None, :, :, :]}
