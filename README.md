@@ -1,0 +1,2 @@
+# YOLOX_onnx_inference
+YOLOXでonnxモデルを用いて画像と動画を推論するコード
