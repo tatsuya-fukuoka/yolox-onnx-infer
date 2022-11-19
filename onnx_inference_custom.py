@@ -13,8 +13,9 @@ import time
 import logging
 
 from yolox.data.data_augment import preproc as preprocess
-from yolox.data.datasets import COCO_CLASSES
-from yolox.utils import mkdir, multiclass_nms, demo_postprocess, vis
+from yolox.data.datasets.coco_classes import COCO_CLASSES
+from yolox.utils.demo_utils import mkdir, multiclass_nms, demo_postprocess
+from yolox.utils.visualize import vis
 
 
 def make_parser():
@@ -91,6 +92,7 @@ def infe_image(args,input_shape):
     img, ratio = preprocess(origin_img, input_shape)
     
     start = time.time()
+    logging.info(f'onnx model: {os.path.basename(args.model)}')
     session = onnxruntime.InferenceSession(args.model)
     
     ort_inputs = {session.get_inputs()[0].name: img[None, :, :, :]}
@@ -104,6 +106,8 @@ def infe_image(args,input_shape):
     output_path = os.path.join(args.output_dir, os.path.basename(args.input_path))
     logging.info(f'save_path: {output_path}')
     cv2.imwrite(output_path, result_img)
+    
+    logging.info(f'Inference Finish!')
 
 
 def infe_video(args,input_shape):
@@ -119,6 +123,7 @@ def infe_video(args,input_shape):
     vid_writer = cv2.VideoWriter(
             save_path, cv2.VideoWriter_fourcc(*"mp4v"), fps, (int(width), int(height))
         )
+    logging.info(f'onnx model: {os.path.basename(args.model)}')
     
     while True:
         ret_val, origin_img = cap.read()
@@ -144,6 +149,7 @@ def infe_video(args,input_shape):
             break
     
     logging.info(f'save_path: {save_path}')
+    logging.info(f'Inference Finish!')
 
 
 def main():
