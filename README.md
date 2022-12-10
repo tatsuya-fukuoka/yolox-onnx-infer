@@ -1,8 +1,6 @@
 # YOLOX_onnx_inference
 YOLOXでonnxモデルを用いて画像と動画を推論するコード
 
-以下の方法ではなく、[YOLOX](https://github.com/Megvii-BaseDetection/YOLOX)のdemo/ONNXRnutimeフォルダに置いて実行しても良い。
-
 ## 1. 環境構築
 ```bash
 pip install -U pip && pip install -r requirements.txt
