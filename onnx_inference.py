@@ -10,7 +10,7 @@ import cv2
 import time
 import logging
 
-from yolox.demo_utils import YOLOXONNX, YOLOXONNX_VIS
+from yolox.demo_utils import YOLOXONNX
 
 
 def make_parser():
@@ -64,23 +64,23 @@ def make_parser():
     return parser
 
 
-def infer_image(args,yolox_onnx, yolox_vis):
+def infer_image(args,yolox_onnx):
     origin_img = cv2.imread(args.input_path)
-    start = time.time()
-    predictions, ratio = yolox_onnx.inference(origin_img)
-    logging.info(f'Infer time: {(time.time()-start)*1000:.2f} [ms]')
-    
-    result_img = yolox_vis.visual(origin_img, predictions, ratio)
     
     os.makedirs(args.output_dir, exist_ok=True)
     output_path = os.path.join(args.output_dir, os.path.basename(args.input_path))
-    logging.info(f'save_path: {output_path}')
+    
+    start = time.time()
+    result_img = yolox_onnx.inference(origin_img)
+    logging.info(f'Infer time: {(time.time()-start)*1000:.2f} [ms]')
+    
     cv2.imwrite(output_path, result_img)
     
+    logging.info(f'save_path: {output_path}')
     logging.info(f'Inference Finish!')
 
 
-def infer_video(args,yolox_onnx, yolox_vis):
+def infer_video(args,yolox_onnx):
     cap = cv2.VideoCapture(args.input_path)
     width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)  # float
     height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)  # float
@@ -102,10 +102,8 @@ def infer_video(args,yolox_onnx, yolox_vis):
             break
         
         start = time.time()
-        predictions, ratio = yolox_onnx.inference(origin_img)
+        result_img = yolox_onnx.inference(origin_img)
         logging.info(f'Frame: {frame_id}/{frame_count}, Infer time: {(time.time()-start)*1000:.2f} [ms]')
-        
-        result_img = yolox_vis.visual(origin_img, predictions, ratio)
         
         writer.write(result_img)
         
@@ -135,14 +133,11 @@ def main():
         with_p6=args.with_p6,
         providers=['CUDAExecutionProvider', 'CPUExecutionProvider'],
     )
-    yolox_vis = YOLOXONNX_VIS(
-        class_score_th=args.score_thr
-    )
     
     if args.mode == 'image':
-        infer_image(args,yolox_onnx, yolox_vis)
+        infer_image(args,yolox_onnx)
     elif args.mode == 'video':
-        infer_video(args,yolox_onnx, yolox_vis)
+        infer_video(args,yolox_onnx)
 
 
 if __name__ == '__main__':
