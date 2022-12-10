@@ -12,10 +12,8 @@ import onnxruntime
 import time
 import logging
 
-from yolox.data.data_augment import preproc as preprocess
-from yolox.data.datasets.coco_classes import COCO_CLASSES
-from yolox.utils.demo_utils import mkdir, multiclass_nms, demo_postprocess
-from yolox.utils.visualize import vis
+from yolox.data_augment import preproc as preprocess
+from yolox.demo_utils import mkdir, demo_postprocess, visual
 
 
 def make_parser():
@@ -67,24 +65,6 @@ def make_parser():
         help="Whether your model uses p6 in FPN/PAN.",
     )
     return parser
-
-
-def visual(origin_img, predictions, ratio, args):
-    boxes = predictions[:, :4]
-    scores = predictions[:, 4:5] * predictions[:, 5:]
-    boxes_xyxy = np.ones_like(boxes)
-    boxes_xyxy[:, 0] = boxes[:, 0] - boxes[:, 2]/2.
-    boxes_xyxy[:, 1] = boxes[:, 1] - boxes[:, 3]/2.
-    boxes_xyxy[:, 2] = boxes[:, 0] + boxes[:, 2]/2.
-    boxes_xyxy[:, 3] = boxes[:, 1] + boxes[:, 3]/2.
-    boxes_xyxy /= ratio
-    dets = multiclass_nms(boxes_xyxy, scores, nms_thr=0.45, score_thr=0.1)
-    if dets is not None:
-        final_boxes, final_scores, final_cls_inds = dets[:, :4], dets[:, 4], dets[:, 5]
-        origin_img = vis(origin_img, final_boxes, final_scores, final_cls_inds,
-                        conf=args.score_thr, class_names=COCO_CLASSES)
-    
-    return origin_img
 
 
 def infer_image(args,input_shape):
