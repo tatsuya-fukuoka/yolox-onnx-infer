@@ -91,8 +91,8 @@ def infer_video(args,yolox_onnx, yolox_vis):
     os.makedirs(output_dir, exist_ok=True)
     save_path = os.path.join(output_dir,os.path.basename(args.input_path))
     
-    vid_writer = cv2.VideoWriter(
-            save_path, cv2.VideoWriter_fourcc(*"mp4v"), fps, (int(width), int(height))
+    writer = cv2.VideoWriter(
+        save_path, cv2.VideoWriter_fourcc(*"mp4v"), fps, (int(width), int(height))
         )
     
     frame_id = 1
@@ -107,13 +107,16 @@ def infer_video(args,yolox_onnx, yolox_vis):
         
         result_img = yolox_vis.visual(origin_img, predictions, ratio)
         
-        vid_writer.write(result_img)
+        writer.write(result_img)
         
         ch = cv2.waitKey(1)
         if ch == 27 or ch == ord("q") or ch == ord("Q"):
             break
         
         frame_id+=1
+        
+    writer.release()
+    cv2.destroyAllWindows()
     
     logging.info(f'save_path: {save_path}')
     logging.info(f'Inference Finish!')
