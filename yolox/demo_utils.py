@@ -36,7 +36,9 @@ class YOLOXONNX(object):
         output = self.onnx_session.run(None, ort_inputs)
         predictions = self.demo_postprocess(output[0], self.input_shape)[0]
         
-        return predictions, ratio
+        result_img = self.visual(origin_img, predictions, ratio)
+        
+        return result_img
     
     
     def preproc(self, img, input_size, swap=(2, 0, 1)):
@@ -83,14 +85,7 @@ class YOLOXONNX(object):
         outputs[..., 2:4] = np.exp(outputs[..., 2:4]) * expanded_strides
         
         return outputs
-
-
-class YOLOXONNX_VIS(object):
-    def __init__(
-        self,
-        class_score_th=0.3,
-    ):
-        self.score_thr = class_score_th
+    
     
     def visual(self, origin_img, predictions, ratio):
         boxes = predictions[:, :4]
@@ -105,7 +100,7 @@ class YOLOXONNX_VIS(object):
         if dets is not None:
             final_boxes, final_scores, final_cls_inds = dets[:, :4], dets[:, 4], dets[:, 5]
             origin_img = self.vis(origin_img, final_boxes, final_scores, final_cls_inds,
-                            conf=self.score_thr, class_names=COCO_CLASSES)
+                            conf=self.class_score_th, class_names=COCO_CLASSES)
         
         return origin_img
     
