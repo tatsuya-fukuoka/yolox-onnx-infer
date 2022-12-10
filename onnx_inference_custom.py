@@ -87,7 +87,7 @@ def visual(origin_img, predictions, ratio, args):
     return origin_img
 
 
-def infe_image(args,input_shape):
+def infer_image(args,input_shape):
     origin_img = cv2.imread(args.input_path)
     img, ratio = preprocess(origin_img, input_shape)
     
@@ -110,11 +110,12 @@ def infe_image(args,input_shape):
     logging.info(f'Inference Finish!')
 
 
-def infe_video(args,input_shape):
+def infer_video(args,input_shape):
     cap = cv2.VideoCapture(args.input_path)
     width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)  # float
     height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)  # float
     fps = cap.get(cv2.CAP_PROP_FPS)
+    frame_count = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
     
     output_dir = args.output_dir
     mkdir(output_dir)
@@ -125,6 +126,7 @@ def infe_video(args,input_shape):
         )
     logging.info(f'onnx model: {os.path.basename(args.model)}')
     
+    frame_id = 1
     while True:
         ret_val, origin_img = cap.read()
         if ret_val:
@@ -136,7 +138,7 @@ def infe_video(args,input_shape):
             ort_inputs = {session.get_inputs()[0].name: img[None, :, :, :]}
             output = session.run(None, ort_inputs)
             predictions = demo_postprocess(output[0], input_shape, p6=args.with_p6)[0]
-            logging.info(f'Infer time: {time.time()-start:.4f} [s]')
+            logging.info(f'Frame: {frame_id}/{frame_count}, Infer time: {time.time()-start:.5f} [s]')
             
             result_img = visual(origin_img, predictions, ratio, args)
             
@@ -147,6 +149,8 @@ def infe_video(args,input_shape):
                 break
         else:
             break
+        
+        frame_id+=1
     
     logging.info(f'save_path: {save_path}')
     logging.info(f'Inference Finish!')
@@ -155,15 +159,15 @@ def infe_video(args,input_shape):
 def main():
     args = make_parser().parse_args()
     logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s:%(name)s - %(message)s")
+    logging.info(f'Inference mode: {args.mode}')
     
     input_shape = tuple(map(int, args.input_shape.split(',')))
     logging.info(f'Input Size: {input_shape}')
     
-    logging.info(f'Inference mode: {args.mode}')
     if args.mode == 'image':
-        infe_image(args,input_shape)
+        infer_image(args,input_shape)
     elif args.mode == 'video':
-        infe_video(args,input_shape)
+        infer_video(args,input_shape)
 
 
 if __name__ == '__main__':
