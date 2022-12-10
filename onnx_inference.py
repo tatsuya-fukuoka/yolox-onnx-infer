@@ -22,14 +22,14 @@ def make_parser():
         "-mo",
         "--mode",
         type=str,
-        default="image",
+        default="video",
         help="Inputfile format",
     )
     parser.add_argument(
         "-m",
         "--model",
         type=str,
-        default="yolox.onnx",
+        default="model/yolox_tiny.onnx",
         help="Input your onnx model.",
     )
     parser.add_argument(
@@ -43,7 +43,7 @@ def make_parser():
         "-o",
         "--output_dir",
         type=str,
-        default='demo_output',
+        default='output',
         help="Path to your output directory.",
     )
     parser.add_argument(
@@ -56,7 +56,7 @@ def make_parser():
     parser.add_argument(
         "--input_shape",
         type=str,
-        default="640,640",
+        default="416,416",
         help="Specify an input shape for inference.",
     )
     parser.add_argument(
@@ -109,25 +109,24 @@ def infer_video(args,input_shape):
     frame_id = 1
     while True:
         ret_val, origin_img = cap.read()
-        if ret_val:
-            img, ratio = preprocess(origin_img, input_shape)
-            
-            start = time.time()
-            session = onnxruntime.InferenceSession(args.model)
-            
-            ort_inputs = {session.get_inputs()[0].name: img[None, :, :, :]}
-            output = session.run(None, ort_inputs)
-            predictions = demo_postprocess(output[0], input_shape, p6=args.with_p6)[0]
-            logging.info(f'Frame: {frame_id}/{frame_count}, Infer time: {time.time()-start:.5f} [s]')
-            
-            result_img = visual(origin_img, predictions, ratio, args)
-            
-            vid_writer.write(result_img)
-            
-            ch = cv2.waitKey(1)
-            if ch == 27 or ch == ord("q") or ch == ord("Q"):
-                break
-        else:
+        if not ret_val:
+            break
+        img, ratio = preprocess(origin_img, input_shape)
+        
+        start = time.time()
+        session = onnxruntime.InferenceSession(args.model)
+        
+        ort_inputs = {session.get_inputs()[0].name: img[None, :, :, :]}
+        output = session.run(None, ort_inputs)
+        predictions = demo_postprocess(output[0], input_shape, p6=args.with_p6)[0]
+        logging.info(f'Frame: {frame_id}/{frame_count}, Infer time: {time.time()-start:.5f} [s]')
+        
+        result_img = visual(origin_img, predictions, ratio, args)
+        
+        vid_writer.write(result_img)
+        
+        ch = cv2.waitKey(1)
+        if ch == 27 or ch == ord("q") or ch == ord("Q"):
             break
         
         frame_id+=1
