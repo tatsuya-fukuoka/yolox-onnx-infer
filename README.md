@@ -15,6 +15,7 @@ docker run -it --name=yolox-onnx-infer -v /home/<user>/yolox-onnx-infer:/home ta
 ```
 ### 1.3 Docker Hub
 ```bash
+docker pull tatsuya060504/yolox-onnx-infer:raspberrypi
 ```
 
 ## 2. execution command
