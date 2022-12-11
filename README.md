@@ -32,5 +32,5 @@ python onnx_inference.py -mo image -m model/yolox_tiny.onnx -i sample_image.jpg 
 python onnx_inference.py -mo <data type> -m <onnx model path> -i <video path> -o outputs -s <score threshold> --input_shape <input size>
 
 #example
-python onnx_inference.py -mo video -m model/yolox_tiny.onnx -i sample_video.mp4 -o outputs -s 0.3 --input_shape 416,416
+python onnx_inference.py -mo video -m model/yolox_tiny.onnx -i sample.mp4 -o outputs -s 0.3 --input_shape 416,416
 ```
