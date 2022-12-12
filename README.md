@@ -18,7 +18,13 @@ docker run -it --name=yolox-onnx-infer -v /home/<user>/yolox-onnx-infer:/home ta
 docker pull tatsuya060504/yolox-onnx-infer:raspberrypi
 ```
 
-## 2. execution command
+## 2. Inference model download
+```
+cd model
+sh download_yolox_<type>_onnx.sh
+```
+
+## 3. execution command
 ### image
 ```bash
 #templete
