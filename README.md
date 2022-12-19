@@ -23,6 +23,9 @@ docker pull tatsuya060504/yolox-onnx-infer:raspberrypi
 cd model
 sh download_yolox_<type>_onnx.sh
 ```
+* [yolox_nano.onnx](https://drive.google.com/file/d/17_U9mVqb6-07P2uQ-_A5fd-F2Dp7_-j-/view?usp=share_link)
+* [yolox_tiny.onnx](https://drive.google.com/file/d/1uLZMCrYzt-bDunqO6xByPqym9bfk_5q3/view?usp=share_link)
+* [yolox_s.onnx](https://drive.google.com/file/d/1kb2wgrNOp15AWYiVI70f1ll4vbvMqRqh/view?usp=share_link)
 
 ## 3. execution command
 ### image
