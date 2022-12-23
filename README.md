@@ -14,8 +14,11 @@ docker build -t tatsuya060504/yolox-onnx-infer:raspberrypi .
 docker run -it --name=yolox-onnx-infer -v /home/<user>/yolox-onnx-infer:/home tatsuya060504/yolox-onnx-infer:raspberrypi
 ```
 ### 1.3 Docker Hub
+https://hub.docker.com/repository/docker/tatsuya060504/yolox-onnx-infer
 ```bash
 docker pull tatsuya060504/yolox-onnx-infer:raspberrypi
+#or
+docker pull tatsuya060504/yolox-onnx-infer:wsl2
 ```
 
 ## 2. Inference model download
