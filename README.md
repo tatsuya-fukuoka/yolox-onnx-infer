@@ -85,7 +85,7 @@ The arguments when executing the command are as follows.
                         Specify an input shape for inference.
   --with_p6             Whether your model uses p6 in FPN/PAN.
 ```
-## image
+## Image
 ```bash
 #templete
 python onnx_inference.py -mo <data type> -m <onnx model path> -i <image path> -o <input dir> -s <score threshold> --input_shape <input size>
@@ -93,7 +93,7 @@ python onnx_inference.py -mo <data type> -m <onnx model path> -i <image path> -o
 #example
 python onnx_inference.py -mo image -m model/yolox_tiny.onnx -i sample_image.jpg -o outputs -s 0.3 --input_shape 416,416
 ```
-## video
+## Video
 ```bash
 #templete
 python onnx_inference.py -mo <data type> -m <onnx model path> -i <video path> -o outputs -s <score threshold> --input_shape <input size>
