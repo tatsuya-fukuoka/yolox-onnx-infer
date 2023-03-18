@@ -21,7 +21,7 @@ docker pull tatsuya060504/yolox-onnx-infer:wsl2
 ```
 ### 1.4 Docker run
 ```
-docker run -it --name=yolox-onnx-infer -v $(pwd)r:/home tatsuya060504/yolox-onnx-infer:v1.0.0
+docker run -it --name=yolox-onnx-infer -v $(pwd):/home tatsuya060504/yolox-onnx-infer:v1.0.0
 ```
 
 ## 2. Inference model download
