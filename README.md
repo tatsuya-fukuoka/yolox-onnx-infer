@@ -8,7 +8,7 @@ YOLOXでonnxモデルを用いて画像と動画を推論するコード
 ```bash
 pip install -U pip && pip install -r requirements.txt
 ```
-## 1.2 Dockerfile
+## 1.2 Docker
 ### 1.2.1 docker build
 ```
 FROM ubuntu:20.04
