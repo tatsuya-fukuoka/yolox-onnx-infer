@@ -10,8 +10,7 @@ pip install -U pip && pip install -r requirements.txt
 ```
 ### 1.2 Dockerfile
 ```bash
-docker build -t tatsuya060504/yolox-onnx-infer:raspberrypi .
-docker run -it --name=yolox-onnx-infer -v /home/<user>/yolox-onnx-infer:/home tatsuya060504/yolox-onnx-infer:raspberrypi
+docker build -t tatsuya060504/yolox-onnx-infer:v1.0.0 .
 ```
 ### 1.3 Docker Hub
 https://hub.docker.com/repository/docker/tatsuya060504/yolox-onnx-infer
@@ -19,6 +18,10 @@ https://hub.docker.com/repository/docker/tatsuya060504/yolox-onnx-infer
 docker pull tatsuya060504/yolox-onnx-infer:raspberrypi
 #or
 docker pull tatsuya060504/yolox-onnx-infer:wsl2
+```
+### 1.4 Docker run
+```
+docker run -it --name=yolox-onnx-infer -v $(pwd)r:/home tatsuya060504/yolox-onnx-infer:v1.0.0
 ```
 
 ## 2. Inference model download
