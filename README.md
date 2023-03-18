@@ -58,6 +58,7 @@ docker run -it --name=yolox-onnx-infer -v $(pwd):/home tatsuya060504/yolox-onnx-
 ```
 
 # 2. Inference model download
+You can download the yolox-onnx model by executing the shell script in the model folder.
 ```
 cd model
 sh download_yolox_<type>_onnx.sh
