@@ -68,6 +68,22 @@ sh download_yolox_<type>_onnx.sh
 * [yolox_s.onnx](https://drive.google.com/file/d/1kb2wgrNOp15AWYiVI70f1ll4vbvMqRqh/view?usp=share_link)
 
 # 3. execution command
+The arguments when executing the command are as follows.
+```txt
+  -mo MODE, --mode MODE
+                        Inputfile format
+  -m MODEL, --model MODEL
+                        Input your onnx model.
+  -i INPUT_PATH, --input_path INPUT_PATH
+                        Path to your input image.
+  -o OUTPUT_DIR, --output_dir OUTPUT_DIR
+                        Path to your output directory.
+  -s SCORE_THR, --score_thr SCORE_THR
+                        Score threshould to filter the result.
+  --input_shape INPUT_SHAPE
+                        Specify an input shape for inference.
+  --with_p6             Whether your model uses p6 in FPN/PAN.
+```
 ## image
 ```bash
 #templete
