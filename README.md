@@ -10,7 +10,7 @@ pip install -U pip && pip install -r requirements.txt
 ```
 ## 1.2 Docker
 ### 1.2.1 docker build
-```
+```Dockerfile
 FROM ubuntu:20.04
 USER root
 
@@ -27,7 +27,7 @@ RUN apt-get update && \
     pip install -U pip && \
     pip install onnxruntime==1.13.1 opencv-python==4.6.0.66
 ```
-```
+```Dockerfile
 FROM debian:stable-slim
 USER root
 
