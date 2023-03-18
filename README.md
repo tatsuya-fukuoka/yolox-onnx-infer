@@ -75,7 +75,7 @@ The arguments when executing the command are as follows.
   -m MODEL, --model MODEL
                         Input your onnx model.
   -i INPUT_PATH, --input_path INPUT_PATH
-                        Path to your input image.
+                        Path to your input image or video.
   -o OUTPUT_DIR, --output_dir OUTPUT_DIR
                         Path to your output directory.
   -s SCORE_THR, --score_thr SCORE_THR
