@@ -8,7 +8,7 @@ import logging
 import cv2
 import yaml
 
-from yolox.utils import YOLOXONNX
+from yolox.utils import Yoloxonnx
 
 
 def infer_image(project_config, yolox_onnx):
@@ -84,7 +84,7 @@ def main():
     
     project_config = config["project_config"]
 
-    yolox_onnx = YOLOXONNX(config["yolox_config"])
+    yolox_onnx = Yoloxonnx(config["yolox_config"])
     
     if project_config["mode"] == 'image':
         infer_image(project_config, yolox_onnx)
