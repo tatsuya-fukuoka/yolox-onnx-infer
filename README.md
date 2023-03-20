@@ -69,35 +69,22 @@ You can also get the model from the Google Drive link below.
 * [yolox_s.onnx](https://drive.google.com/file/d/1kb2wgrNOp15AWYiVI70f1ll4vbvMqRqh/view?usp=share_link)
 
 # 3. Inference command
-The arguments when executing the command are as follows.
-```txt
-  -mo MODE, --mode MODE
-                        Inputfile format
-  -m MODEL, --model MODEL
-                        Input your onnx model.
-  -i INPUT_PATH, --input_path INPUT_PATH
-                        Path to your input image or video.
-  -o OUTPUT_DIR, --output_dir OUTPUT_DIR
-                        Path to your output directory.
-  -s SCORE_THR, --score_thr SCORE_THR
-                        Score threshould to filter the result.
-  --input_shape INPUT_SHAPE
-                        Specify an input shape for inference.
-  --with_p6             Whether your model uses p6 in FPN/PAN.
-```
-## Image
-```bash
-#templete
-python onnx_inference.py -mo <data type> -m <onnx model path> -i <image path> -o <input dir> -s <score threshold> --input_shape <input size>
+## 3.1 Yaml file
+```yaml
+project_config:
+  mode: video
+  input_path: sample.mp4
+  output_dir: outputs
 
-#example
-python onnx_inference.py -mo image -m model/yolox_tiny.onnx -i sample_image.jpg -o outputs -s 0.3 --input_shape 416,416
+yolox_config:
+  model_path: model/yolox_tiny.onnx
+  class_score_thr: 0.3
+  input_shape: 416,416
+  with_p6: False
+  device: cpu
 ```
-## Video
-```bash
-#templete
-python onnx_inference.py -mo <data type> -m <onnx model path> -i <video path> -o outputs -s <score threshold> --input_shape <input size>
 
-#example
-python onnx_inference.py -mo video -m model/yolox_tiny.onnx -i sample.mp4 -o outputs -s 0.3 --input_shape 416,416
+## 3.2 Inference command
+```bash
+python onnx_inference.py
 ```
