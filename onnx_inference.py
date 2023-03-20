@@ -1,74 +1,26 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Copyright (c) Megvii, Inc. and its affiliates.
 
-import argparse
 import os
-
-import cv2
-
 import time
 import logging
 
-from yolox.demo_utils import YOLOXONNX
+import cv2
+import yaml
+
+from yolox.utils import YOLOXONNX
 
 
-def make_parser():
-    parser = argparse.ArgumentParser("onnxruntime inference sample")
-    parser.add_argument(
-        "-mo",
-        "--mode",
-        type=str,
-        default="video",
-        help="Inputfile format",
-    )
-    parser.add_argument(
-        "-m",
-        "--model",
-        type=str,
-        default="model/yolox_tiny.onnx",
-        help="Input your onnx model.",
-    )
-    parser.add_argument(
-        "-i",
-        "--input_path",
-        type=str,
-        default='test_image.png',
-        help="Path to your input image.",
-    )
-    parser.add_argument(
-        "-o",
-        "--output_dir",
-        type=str,
-        default='output',
-        help="Path to your output directory.",
-    )
-    parser.add_argument(
-        "-s",
-        "--score_thr",
-        type=float,
-        default=0.3,
-        help="Score threshould to filter the result.",
-    )
-    parser.add_argument(
-        "--input_shape",
-        type=str,
-        default="416,416",
-        help="Specify an input shape for inference.",
-    )
-    parser.add_argument(
-        "--with_p6",
-        action="store_true",
-        help="Whether your model uses p6 in FPN/PAN.",
-    )
-    return parser
+def infer_image(project_config, yolox_onnx):
+    input_path = project_config["input_path"]
+    output_dir = project_config["output_dir"]
 
+    origin_img = cv2.imread(input_path)
+    h, w, c = origin_img.shape
+    logging.info(f'Input info - width: {w}, height: {h}')
 
-def infer_image(args,yolox_onnx):
-    origin_img = cv2.imread(args.input_path)
-    
-    os.makedirs(args.output_dir, exist_ok=True)
-    output_path = os.path.join(args.output_dir, os.path.basename(args.input_path))
+    os.makedirs(output_dir, exist_ok=True)
+    output_path = os.path.join(output_dir, os.path.basename(input_path))
     
     start = time.time()
     result_img = yolox_onnx.inference(origin_img)
@@ -80,16 +32,19 @@ def infer_image(args,yolox_onnx):
     logging.info(f'Inference Finish!')
 
 
-def infer_video(args,yolox_onnx):
-    cap = cv2.VideoCapture(args.input_path)
-    width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)  # float
-    height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)  # float
+def infer_video(project_config, yolox_onnx):
+    input_path = project_config["input_path"]
+    output_dir = project_config["output_dir"]
+
+    cap = cv2.VideoCapture(input_path)
+    width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
+    height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
     fps = cap.get(cv2.CAP_PROP_FPS)
     frame_count = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-    
-    output_dir = args.output_dir
+    logging.info(f'Input info - width: {width}, height: {height}, fps: {fps}')
+
     os.makedirs(output_dir, exist_ok=True)
-    save_path = os.path.join(output_dir,os.path.basename(args.input_path))
+    save_path = os.path.join(output_dir, os.path.basename(input_path))
     
     writer = cv2.VideoWriter(
         save_path, cv2.VideoWriter_fourcc(*"mp4v"), fps, (int(width), int(height))
@@ -121,23 +76,20 @@ def infer_video(args,yolox_onnx):
 
 
 def main():
-    args = make_parser().parse_args()
     logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s:%(name)s - %(message)s")
+
+    with open('config.yaml', 'r') as yml:
+        config = yaml.safe_load(yml)
+        logging.info(config)
     
-    input_shape = tuple(map(int, args.input_shape.split(',')))
+    project_config = config["project_config"]
+
+    yolox_onnx = YOLOXONNX(config["yolox_config"])
     
-    yolox_onnx = YOLOXONNX(
-        model_path= args.model,
-        input_shape= input_shape,
-        class_score_th=args.score_thr,
-        with_p6=args.with_p6,
-        providers=['CUDAExecutionProvider', 'CPUExecutionProvider'],
-    )
-    
-    if args.mode == 'image':
-        infer_image(args,yolox_onnx)
-    elif args.mode == 'video':
-        infer_video(args,yolox_onnx)
+    if project_config["mode"] == 'image':
+        infer_image(project_config, yolox_onnx)
+    else:
+        infer_video(project_config, yolox_onnx)
 
 
 if __name__ == '__main__':

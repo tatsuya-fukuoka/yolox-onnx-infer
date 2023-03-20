@@ -1,0 +1,11 @@
+project_config:
+  mode: video
+  input_path: sample.mp4
+  output_dir: outputs
+
+yolox_config:
+  model_path: model/yolox_tiny.onnx
+  class_score_thr: 0.3
+  input_shape: 416,416
+  with_p6: False
+  device: cpu
