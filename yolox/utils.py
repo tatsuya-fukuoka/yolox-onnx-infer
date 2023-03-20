@@ -11,7 +11,7 @@ from yolox.coco_classes import COCO_CLASSES
 from yolox.color_list import _COLORS
 
 
-class YOLOXONNX(object):
+class Yoloxonnx(object):
     def __init__(
         self,
         yolox_config,
