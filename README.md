@@ -25,7 +25,7 @@ RUN apt-get update && \
     apt-get -y install libgl1-mesa-dev && \
     apt-get -y install libglib2.0-0 && \
     pip install -U pip && \
-    pip install onnxruntime==1.13.1 opencv-python==4.6.0.66
+    pip install onnxruntime==1.13.1 opencv-python==4.6.0.66 pyyaml==6.0
 ```
 ```Dockerfile
 FROM debian:stable-slim
@@ -40,7 +40,7 @@ RUN apt-get update && \
     apt-get -y install libgl1-mesa-dev && \
     apt-get -y install libglib2.0-0 && \
     pip install -U pip && \
-    pip install onnxruntime==1.13.1 opencv-python==4.6.0.66
+    pip install onnxruntime==1.13.1 opencv-python==4.6.0.66 pyyaml==6.0
 ```
 ```bash
 docker build -t tatsuya060504/yolox-onnx-infer:v1.0.0 .
