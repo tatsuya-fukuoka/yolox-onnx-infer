@@ -68,7 +68,7 @@ You can also get the model from the Google Drive link below.
 * [yolox_tiny.onnx](https://drive.google.com/file/d/1uLZMCrYzt-bDunqO6xByPqym9bfk_5q3/view?usp=share_link)
 * [yolox_s.onnx](https://drive.google.com/file/d/1kb2wgrNOp15AWYiVI70f1ll4vbvMqRqh/view?usp=share_link)
 
-# 3. Inference command
+# 3. Inference
 ## 3.1 Yaml file
 ```yaml
 project_config:
